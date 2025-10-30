@@ -1,0 +1,24 @@
+TotalQuantidadeExportada =
+CALCULATE(
+    SUM('Exportacao'[TotalQuantidade]),
+    FILTER('Exportacao', 'Exportacao'[Coluna1] = "Ok!" && 'Exportacao'[Ano] >= 2000)
+)
+
+RankingExportacao =
+RANKX(
+    ALL('Exportacao'[País Corrigido]),
+    CALCULATE(SUM('Exportacao'[TotalQuantidade]), FILTER('Exportacao', 'Exportacao'[Coluna1] = "Ok!" && 'Exportacao'[Ano] >= 2000)),
+    ,
+    DESC,
+    DENSE
+)
+
+PercentualExportacao =
+DIVIDE(
+    [TotalQuantidadeExportada],
+    CALCULATE(SUM('Exportacao'[TotalQuantidade]), FILTER('Exportacao', 'Exportacao'[Coluna1] = "Ok!" && 'Exportacao'[Ano] >= 2000)),
+    0
+)
+
+Top10Exportacao =
+IF([RankingExportacao] <= 10, [TotalQuantidadeExportada], BLANK())
